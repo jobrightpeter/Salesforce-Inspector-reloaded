@@ -3493,6 +3493,30 @@ class UserDetails extends React.PureComponent {
       {className: "all-data-box-inner"},
       h(
         "div",
+        {className: "slds-button-group justify-center slds-m-bottom_x-small"},
+        h(
+          "a",
+          {
+            href: this.getUserDetailLink(user.Id),
+            target: linkTarget,
+            onClick: handleLightningLinkClick,
+            className: "slds-button slds-button_neutral",
+          },
+          "Details"
+        ),
+        this.doSupportLoginAs(user)
+          ? h(
+            "a",
+            {
+              onClick: () => this.loginAsInIncognito(user.Id),
+              className: "slds-button slds-button_neutral",
+            },
+            "Incognito"
+          )
+          : null
+      ),
+      h(
+        "div",
         {className: "all-data-box-data slds-m-bottom_xx-small"},
         h(
           "table",
@@ -3668,16 +3692,6 @@ class UserDetails extends React.PureComponent {
         h(
           "a",
           {
-            href: this.getUserDetailLink(user.Id),
-            target: linkTarget,
-            onClick: handleLightningLinkClick,
-            className: "slds-button slds-button_neutral",
-          },
-          "Details"
-        ),
-        h(
-          "a",
-          {
             href: this.getUserPsetLink(user.Id),
             target: linkTarget,
             onClick: handleLightningLinkClick,
@@ -3803,15 +3817,6 @@ class UserDetails extends React.PureComponent {
               className: "slds-button slds-button_neutral",
             },
             "LoginAs"
-          ),
-          h(
-            "a",
-            {
-              onClick: () => this.loginAsInIncognito(user.Id),
-              target: linkTarget,
-              className: "slds-button slds-button_neutral",
-            },
-            "Incognito"
           ),
           this.canLoginAsPortal(user)
             ? h(
