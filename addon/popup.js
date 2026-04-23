@@ -276,6 +276,7 @@ class App extends React.PureComponent {
       v: ["click", "logsViewerBtn"],
       b: ["click", "apiStatisticsBtn"],
       c: ["click", "dependenciesExplorerBtn"],
+      g: ["userAction", "loginSelectedUserIncognito"],
       o: ["tab", "objectTab"],
       u: ["tab", "userTab"],
       s: ["tab", "shortcutTab"],
@@ -293,6 +294,8 @@ class App extends React.PureComponent {
     }
     if (action === "all") {
       refs.showAllDataBox.refs?.showAllDataBoxSObject?.[target]();
+    } else if (action === "userAction") {
+      refs.showAllDataBox.refs?.showAllDataBoxUsers?.[target]?.();
     } else if (action === "click" && refs[target]) {
       refs[target].target = getLinkTarget(e);
       refs[target].click();
@@ -1594,6 +1597,14 @@ class AllDataBoxUsers extends React.PureComponent {
     });
   }
 
+  loginSelectedUserIncognito() {
+    const userDetails = this.refs.userDetails;
+    const {selectedUser} = this.state;
+    if (userDetails && selectedUser && userDetails.doSupportLoginAs(selectedUser)) {
+      userDetails.loginAsInIncognito(selectedUser.Id);
+    }
+  }
+
   render() {
     let {selectedUser, filterDropdownOpen, excludePortalUsersFromSearch, excludeInactiveUsersFromSearch} = this.state;
     let {sfHost, linkTarget, contextOrgId, contextUserId, contextPath}
@@ -1669,6 +1680,7 @@ class AllDataBoxUsers extends React.PureComponent {
         {className: "all-data-box-inner" + (!selectedUser ? " empty" : "")},
         selectedUser
           ? h(UserDetails, {
+            ref: "userDetails",
             user: selectedUser,
             sfHost,
             contextOrgId,
